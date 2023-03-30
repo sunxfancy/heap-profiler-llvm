@@ -101,6 +101,7 @@ public:
   bool needsCfiDiagRt() const;
   bool needsStatsRt() const { return Stats; }
   bool needsScudoRt() const { return Sanitizers.has(SanitizerKind::Scudo); }
+  bool needsHpRt() const { return Sanitizers.has(SanitizerKind::HeapProfiler); }
 
   bool hasMemTag() const {
     return hasMemtagHeap() || hasMemtagStack() || hasMemtagGlobals();

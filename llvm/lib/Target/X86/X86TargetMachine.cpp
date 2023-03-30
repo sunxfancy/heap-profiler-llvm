@@ -579,6 +579,10 @@ void X86PassConfig::addPreEmitPass() {
   addPass(createX86InsertX87waitPass());
 }
 
+extern llvm::cl::opt<bool> EnablePPP, EnableSBP;
+
+extern llvm::MachineFunctionPass *createInstrumentRegProfilerPassPass();
+
 void X86PassConfig::addPreEmitPass2() {
   const Triple &TT = TM->getTargetTriple();
   const MCAsmInfo *MAI = TM->getMCAsmInfo();
@@ -632,6 +636,9 @@ void X86PassConfig::addPreEmitPass2() {
             (M->getFunction("objc_retainAutoreleasedReturnValue") ||
              M->getFunction("objc_unsafeClaimAutoreleasedReturnValue")));
   }));
+
+  if (EnablePPP || EnableSBP)
+    addPass(createInstrumentRegProfilerPassPass());
 }
 
 bool X86PassConfig::addPostFastRegAllocRewrite() {
